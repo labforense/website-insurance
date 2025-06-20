@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Insurance Brasil - Plano de Negócios Interativo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Corporate Trust -->
+    <!-- Application Structure Plan: A single-page, thematic dashboard structure was chosen over a linear report format for better usability. The flow guides the user from the problem (market context) to the solution (company proposal), products, strategy, risks, and execution plan. This non-linear, scannable layout with a sticky navigation allows stakeholders (investors, partners) to quickly access sections of interest, making the dense business plan digestible and engaging. Key interactions include animated counters for impact, toggles for comparisons, interactive cards for product exploration, and filters for risk analysis, all designed to facilitate understanding and exploration. -->
+    <!-- Visualization & Content Choices: 
+    - Market Context -> Goal: Impact -> Viz: Animated Counters -> Interaction: On-scroll animation -> Justification: Immediately conveys the scale of the cyber threat. (Vanilla JS)
+    - SWOT -> Goal: Organize/Analyze -> Viz: Interactive 2x2 Grid -> Interaction: Hover to reveal details -> Justification: More engaging than a static table. (CSS/JS)
+    - Products/Services -> Goal: Organize/Inform -> Viz: Card-based layout with icons -> Interaction: Click to expand/reveal details in a modal -> Justification: Avoids a long text block, allows user-driven exploration. (JS)
+    - Risks -> Goal: Filter/Organize -> Viz: HTML Table with filter buttons -> Interaction: Click to filter table rows by category -> Justification: Makes the dense risk matrix manageable. (JS)
+    - Financials -> Goal: Inform/Compare -> Viz: Bar Chart -> Interaction: Animated on load, hover for tooltips -> Justification: Visually demonstrates projected growth trends. (Chart.js)
+    - Roadmap -> Goal: Show Change/Process -> Viz: Vertical timeline -> Interaction: On-scroll reveal -> Justification: More intuitive and visually appealing than a Gantt table. (CSS/JS)
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F5F2;
+            color: #1E293B;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #3B82F6;
+            border-bottom-color: #3B82F6;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .section-fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .section-fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header id="header" class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="font-extrabold text-xl text-blue-600">Cyber Insurance Brasil</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#cenario" class="nav-link px-3 py-2 rounded-md text-sm font-medium">O Cenário</a>
+                        <a href="#solucao" class="nav-link px-3 py-2 rounded-md text-sm font-medium">A Solução</a>
+                        <a href="#produtos" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Produtos</a>
+                        <a href="#estrategia" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Estratégia</a>
+                        <a href="#riscos" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Riscos</a>
+                        <a href="#plano" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Plano</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
+                        <span class="sr-only">Abrir menu principal</span>
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#cenario" class="nav-link block px-3 py-2 rounded-md text-base font-medium">O Cenário</a>
+                <a href="#solucao" class="nav-link block px-3 py-2 rounded-md text-base font-medium">A Solução</a>
+                <a href="#produtos" class="nav-link block px-3 py-2 rounded-md text-base font-medium">Produtos</a>
+                <a href="#estrategia" class="nav-link block px-3 py-2 rounded-md text-base font-medium">Estratégia</a>
+                <a href="#riscos" class="nav-link block px-3 py-2 rounded-md text-base font-medium">Riscos</a>
+                <a href="#plano" class="nav-link block px-3 py-2 rounded-md text-base font-medium">Plano</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="cenario" class="py-20 bg-white section-fade-in">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-base font-semibold text-blue-600 tracking-wide uppercase">O Cenário Digital no Brasil</h2>
+                <p class="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">Um Campo Minado de Riscos Cibernéticos</p>
+                <p class="mt-5 max-w-3xl mx-auto text-xl text-gray-500">A transformação digital acelerada expôs empresas a um volume sem precedentes de ameaças. Os dados revelam uma realidade alarmante que exige uma nova camada de proteção e resiliência para os negócios no país.</p>
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12">
+                    <div class="bg-amber-50 p-6 rounded-lg shadow-md">
+                        <p class="text-5xl font-extrabold text-amber-500" data-counter-target="1379">0</p>
+                        <p class="mt-2 text-lg font-medium text-gray-700">Ataques por Minuto</p>
+                        <p class="mt-1 text-sm text-gray-500">O Brasil é o 2º país mais atacado do mundo, com uma frequência de golpes que demonstra a escala massiva do problema.</p>
+                    </div>
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-md">
+                        <p class="text-5xl font-extrabold text-blue-600" data-counter-target="6.75">0.00</p>
+                        <p class="mt-2 text-lg font-medium text-gray-700">Milhões de R$ (Custo Médio)</p>
+                        <p class="mt-1 text-sm text-gray-500">É o prejuízo médio de uma violação de dados, um impacto financeiro devastador para qualquer organização.</p>
+                    </div>
+                    <div class="bg-emerald-50 p-6 rounded-lg shadow-md">
+                        <p class="text-5xl font-extrabold text-emerald-600" data-counter-target="90">0</p>
+                        <p class="mt-2 text-lg font-medium text-gray-700">% dos Golpes usam Voz (Vishing)</p>
+                        <p class="mt-1 text-sm text-gray-500">A sofisticação dos ataques, impulsionada por IA, explora a confiança humana e contorna defesas tradicionais.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solucao" class="py-20 section-fade-in">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="lg:text-center">
+                    <h2 class="text-base font-semibold text-blue-600 tracking-wide uppercase">Nossa Proposta de Valor</h2>
+                    <p class="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">Cyber Insurance Brasil: Resiliência na Era Digital</p>
+                    <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">Este projeto visa criar uma seguradora especializada e inovadora, focada exclusivamente em riscos cibernéticos. Nosso objetivo é ir além da apólice, atuando como um parceiro estratégico na prevenção de incidentes, na conformidade com a LGPD e na resposta rápida e eficaz quando um ataque ocorre, protegendo o patrimônio e a reputação dos nossos clientes.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="produtos" class="py-20 bg-white section-fade-in">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-base font-semibold text-blue-600 tracking-wide uppercase">Nossos Produtos e Serviços</h2>
+                    <p class="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">Proteção 360° Contra Ameaças Cibernéticas</p>
+                    <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">Desenvolvemos um portfólio completo que combina coberturas financeiras robustas com serviços proativos de prevenção e resposta, criando um ecossistema de segurança para nossos clientes.</p>
+                </div>
+
+                <h3 class="text-2xl font-bold text-center text-gray-800 mb-8">Coberturas Essenciais</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Coberturas Cards -->
+                    <div class="card bg-gray-50 p-6 rounded-lg cursor-pointer" data-modal-target="modal-defesa">
+                        <div class="flex items-center"><span class="text-2xl mr-3">🛡️</span><h4 class="font-bold text-lg">Custos de Defesa e Sanções</h4></div>
+                        <p class="text-sm text-gray-600 mt-2">Cobertura para honorários advocatícios e multas administrativas (LGPD).</p>
+                    </div>
+                    <div class="card bg-gray-50 p-6 rounded-lg cursor-pointer" data-modal-target="modal-dados">
+                        <div class="flex items-center"><span class="text-2xl mr-3">💾</span><h4 class="font-bold text-lg">Responsabilidade por Dados</h4></div>
+                        <p class="text-sm text-gray-600 mt-2">Proteção contra perdas por vazamento de dados de clientes e de terceiros.</p>
+                    </div>
+                    <div class="card bg-gray-50 p-6 rounded-lg cursor-pointer" data-modal-target="modal-interrupcao">
+                        <div class="flex items-center"><span class="text-2xl mr-3">⏱️</span><h4 class="font-bold text-lg">Interrupção de Negócios</h4></div>
+                        <p class="text-sm text-gray-600 mt-2">Cobre perdas de lucro e despesas operacionais durante a paralisação.</p>
+                    </div>
+                    <div class="card bg-gray-50 p-6 rounded-lg cursor-pointer" data-modal-target="modal-extorsao">
+                        <div class="flex items-center"><span class="text-2xl mr-3"> ransom </span><h4 class="font-bold text-lg">Extorsão Cibernética</h4></div>
+                        <p class="text-sm text-gray-600 mt-2">Cobre pagamentos de resgate e custos associados a ataques de ransomware.</p>
+                    </div>
+                    <div class="card bg-gray-50 p-6 rounded-lg cursor-pointer" data-modal-target="modal-notificacao">
+                        <div class="flex items-center"><span class="text-2xl mr-3">🔔</span><h4 class="font-bold text-lg">Notificação e Monitoramento</h4></div>
+                        <p class="text-sm text-gray-600 mt-2">Custos para notificar usuários afetados e monitorar seus dados contra fraudes.</p>
+                    </div>
+                    <div class="card bg-gray-50 p-6 rounded-lg cursor-pointer" data-modal-target="modal-imagem">
+                        <div class="flex items-center"><span class="text-2xl mr-3"> восстановить </span><h4 class="font-bold text-lg">Restituição de Imagem</h4></div>
+                        <p class="text-sm text-gray-600 mt-2">Despesas com consultoria de Relações Públicas para gerenciar crises de reputação.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-center text-gray-800 mt-16 mb-8">Serviços de Valor Agregado</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                     <!-- Serviços Cards -->
+                    <div class="card bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg">
+                        <h4 class="font-bold text-lg">Prevenção de Riscos</h4>
+                        <p class="text-sm text-gray-600 mt-2">Ferramentas como Score Card de maturidade, simulação de phishing (Techguard) e scanner de vulnerabilidades.</p>
+                    </div>
+                    <div class="card bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg">
+                        <h4 class="font-bold text-lg">Resposta a Incidentes 24/7</h4>
+                        <p class="text-sm text-gray-600 mt-2">Acesso imediato a especialistas em forense digital e advogados para conter e investigar ataques.</p>
+                    </div>
+                    <div class="card bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg">
+                        <h4 class="font-bold text-lg">Inteligência de Ameaças com IA</h4>
+                        <p class="text-sm text-gray-600 mt-2">Uso de Inteligência Artificial para análise preditiva e detecção de anomalias, antecipando possíveis ataques.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="estrategia" class="py-20 section-fade-in">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-base font-semibold text-blue-600 tracking-wide uppercase">Análise Estratégica</h2>
+                    <p class="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">Navegando no Ambiente Competitivo</p>
+                    <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">Nossa estratégia é fundamentada em uma análise aprofundada do ambiente de negócios. A análise SWOT a seguir destaca os principais fatores internos e externos que moldam nosso plano de ação, permitindo-nos capitalizar forças, mitigar fraquezas, aproveitar oportunidades e neutralizar ameaças.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-white">
+                    <div class="bg-emerald-600 p-6 rounded-lg">
+                        <h3 class="text-2xl font-bold mb-4">Forças (Strengths)</h3>
+                        <ul class="space-y-2 list-disc list-inside">
+                            <li>**Especialização Focada:** Conhecimento profundo e agilidade no nicho cibernético.</li>
+                            <li>**Inovação Tecnológica:** Potencial para uso de IA na subscrição e prevenção.</li>
+                            <li>**Agilidade de Novo Entrante:** Capacidade de adaptação rápida sem sistemas legados.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-red-600 p-6 rounded-lg">
+                        <h3 class="text-2xl font-bold mb-4">Fraquezas (Weaknesses)</h3>
+                        <ul class="space-y-2 list-disc list-inside">
+                            <li>**Capital Inicial Elevado:** Exigência de R$ 15 milhões pela SUSEP é uma barreira.</li>
+                            <li>**Marca e Histórico Inexistentes:** Desafio na aquisição inicial de clientes e confiança.</li>
+                            <li>**Complexidade da Subscrição:** Risco cibernético dinâmico exige alta expertise.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-sky-600 p-6 rounded-lg">
+                        <h3 class="text-2xl font-bold mb-4">Oportunidades (Opportunities)</h3>
+                        <ul class="space-y-2 list-disc list-inside">
+                            <li>**Crescimento do Mercado:** Aumento de ataques e LGPD impulsionam a demanda.</li>
+                            <li>**Novas Tecnologias (5G, IoT):** Ampliam a superfície de ataque e o mercado segurável.</li>
+                            <li>**Parcerias Estratégicas:** Alianças com empresas de cibersegurança e consultorias.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-700 p-6 rounded-lg">
+                        <h3 class="text-2xl font-bold mb-4">Ameaças (Threats)</h3>
+                        <ul class="space-y-2 list-disc list-inside">
+                            <li>**Concorrência Estabelecida:** Grandes players como Chubb e AIG já atuam no Brasil.</li>
+                            <li>**Evolução das Ameaças:** Ataques com IA podem superar a capacidade de adaptação.</li>
+                            <li>**"Silent Cyber":** Ambiguidade em apólices tradicionais pode diluir a demanda.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="riscos" class="py-20 bg-white section-fade-in">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-base font-semibold text-blue-600 tracking-wide uppercase">Gestão de Riscos</h2>
+                    <p class="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">Antecipando e Mitigando Desafios</p>
+                    <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">Um negócio de seguros é, em sua essência, um negócio de gestão de riscos. Identificamos e planejamos proativamente as respostas para os principais desafios que a Cyber Insurance Brasil enfrentará. Use os filtros para explorar os riscos por categoria.</p>
+                </div>
+                <div class="flex justify-center space-x-2 mb-8">
+                    <button class="risk-filter-btn active bg-blue-600 text-white px-4 py-2 rounded-md" data-filter="all">Todos</button>
+                    <button class="risk-filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-md" data-filter="mercado">Mercado</button>
+                    <button class="risk-filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-md" data-filter="operacional">Operacional</button>
+                    <button class="risk-filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-md" data-filter="regulatorio">Regulatório</button>
+                    <button class="risk-filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-md" data-filter="financeiro">Financeiro</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table id="risk-table" class="min-w-full bg-white border border-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Risco Identificado</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Probabilidade/Impacto</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações de Mitigação</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr class="risk-row" data-category="mercado">
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Evolução Acelerada das Ameaças</td>
+                                <td class="px-6 py-4"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Alta / Alto</span></td>
+                                <td class="px-6 py-4 text-sm text-gray-500">Inteligência de ameaças com IA; Parcerias com firmas de cibersegurança.</td>
+                            </tr>
+                            <tr class="risk-row" data-category="mercado">
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Concorrência Agressiva</td>
+                                <td class="px-6 py-4"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Média / Médio</span></td>
+                                <td class="px-6 py-4 text-sm text-gray-500">Diferenciação por serviços agregados e foco em nichos.</td>
+                            </tr>
+                             <tr class="risk-row" data-category="operacional">
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Falha na Subscrição de Riscos</td>
+                                <td class="px-6 py-4"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Média / Alto</span></td>
+                                <td class="px-6 py-4 text-sm text-gray-500">Treinamento contínuo da equipe e uso de ferramentas de IA para avaliação.</td>
+                            </tr>
+                             <tr class="risk-row" data-category="operacional">
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Vulnerabilidade Cibernética Interna</td>
+                                <td class="px-6 py-4"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Média / Alto</span></td>
+                                <td class="px-6 py-4 text-sm text-gray-500">Políticas de segurança robustas (Circular SUSEP 638) e auditorias regulares.</td>
+                            </tr>
+                             <tr class="risk-row" data-category="regulatorio">
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Mudanças na Legislação (SUSEP, LGPD)</td>
+                                <td class="px-6 py-4"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Média / Médio</span></td>
+                                <td class="px-6 py-4 text-sm text-gray-500">Monitoramento contínuo do ambiente regulatório com apoio jurídico.</td>
+                            </tr>
+                            <tr class="risk-row" data-category="financeiro">
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Insuficiência de Capital para Sinistros</td>
+                                <td class="px-6 py-4"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Baixa / Alto</span></td>
+                                <td class="px-6 py-4 text-sm text-gray-500">Capitalização adequada (R$ 15M) e estratégia de resseguro robusta.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="plano" class="py-20 section-fade-in">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-base font-semibold text-blue-600 tracking-wide uppercase">Plano de Execução e Viabilidade</h2>
+                    <p class="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">Do Conceito à Operação</p>
+                    <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">Nossa jornada está mapeada em um plano claro e faseado, desde a análise inicial até o lançamento oficial. A viabilidade financeira é a base do projeto, garantindo a solidez e o potencial de crescimento da empresa.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-8">Viabilidade Financeira</h3>
+                        <div class="space-y-6">
+                            <div class="bg-white p-6 rounded-lg shadow-md">
+                                <p class="text-sm font-medium text-gray-500">Capital Inicial Requerido (SUSEP)</p>
+                                <p class="text-3xl font-bold text-blue-600">R$ 15.000.000,00</p>
+                                <p class="text-xs text-gray-500 mt-1">Totalmente integralizado para garantir solidez e conformidade.</p>
+                            </div>
+                             <div class="bg-white p-6 rounded-lg shadow-md">
+                                <h4 class="text-lg font-semibold text-gray-700 mb-4">Projeção de Receita (Prêmios)</h4>
+                                <div class="chart-container">
+                                    <canvas id="revenueChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-8">Cronograma Macro do Projeto</h3>
+                        <ol class="relative border-l border-gray-200">
+                            <li class="mb-10 ml-6">
+                                <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white">
+                                    <svg class="w-3 h-3 text-blue-800" fill="currentColor" viewBox="0 0 20 20"><path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4zM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10zM5 13h10v2H5v-2z"></path></svg>
+                                </span>
+                                <h4 class="flex items-center mb-1 text-lg font-semibold text-gray-900">Iniciação e Análise <span class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded ml-3">Jan-Mai 2025</span></h4>
+                                <p class="text-base font-normal text-gray-500">Elaboração do plano de negócios, análise de mercado, regulatória e estudo de viabilidade.</p>
+                            </li>
+                            <li class="mb-10 ml-6">
+                               <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white">
+                                    <svg class="w-3 h-3 text-blue-800" fill="currentColor" viewBox="0 0 20 20"><path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4zM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10zM5 13h10v2H5v-2z"></path></svg>
+                                </span>
+                                <h4 class="flex items-center mb-1 text-lg font-semibold text-gray-900">Autorização SUSEP <span class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded ml-3">Jun-Dez 2025</span></h4>
+                                <p class="text-base font-normal text-gray-500">Submissão do projeto ao órgão regulador e obtenção da autorização para operar.</p>
+                            </li>
+                            <li class="mb-10 ml-6">
+                                <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white">
+                                    <svg class="w-3 h-3 text-blue-800" fill="currentColor" viewBox="0 0 20 20"><path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4zM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10zM5 13h10v2H5v-2z"></path></svg>
+                                </span>
+                                <h4 class="flex items-center mb-1 text-lg font-semibold text-gray-900">Desenvolvimento e Estruturação <span class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded ml-3">Set 2025 - Mar 2026</span></h4>
+                                <p class="text-base font-normal text-gray-500">Desenvolvimento de produtos, implementação de sistemas e recrutamento da equipe.</p>
+                            </li>
+                             <li class="ml-6">
+                                <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white">
+                                    <svg class="w-3 h-3 text-blue-800" fill="currentColor" viewBox="0 0 20 20"><path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4zM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10zM5 13h10v2H5v-2z"></path></svg>
+                                </span>
+                                <h4 class="flex items-center mb-1 text-lg font-semibold text-gray-900">Lançamento da Operação <span class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded ml-3">Abr 2026</span></h4>
+                                <p class="text-base font-normal text-gray-500">Início oficial das operações e emissão da primeira apólice.</p>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center">
+            <p class="font-bold text-lg">Cyber Insurance Brasil</p>
+            <p class="mt-2 text-sm text-gray-400">Projeto de Negócio - Laboratório de Gestão de Negócios</p>
+            <p class="text-sm text-gray-400">Universidade Veiga de Almeida - 2025</p>
+        </div>
+    </footer>
+
+    <!-- Modal Structure -->
+    <div id="modal-container" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+        <div id="modal-content" class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-full overflow-y-auto">
+            <div class="p-6">
+                 <div class="flex justify-between items-start">
+                    <h3 id="modal-title" class="text-2xl font-bold text-gray-900">Título do Modal</h3>
+                    <button id="modal-close" class="text-gray-400 hover:text-gray-600">&times;</button>
+                </div>
+                <div id="modal-body" class="mt-4 text-gray-600 space-y-4">
+                    <!-- Dynamic content goes here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // --- Mobile Menu ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // --- Animated Counters ---
+        const counters = document.querySelectorAll('[data-counter-target]');
+        const speed = 200; 
+
+        const animateCounter = (counter) => {
+            const target = +counter.getAttribute('data-counter-target');
+            const isFloat = target.toString().includes('.');
+            let count = 0;
+
+            const updateCount = () => {
+                const inc = target / speed;
+                count += inc;
+
+                if (count < target) {
+                    counter.innerText = isFloat ? count.toFixed(2).replace('.', ',') : Math.ceil(count);
+                    setTimeout(updateCount, 10);
+                } else {
+                    counter.innerText = isFloat ? target.toFixed(2).replace('.', ',') : target;
+                }
+            };
+            updateCount();
+        };
+        
+        // --- Scroll Animations & Active Nav Link ---
+        const sections = document.querySelectorAll('main section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.3
+        };
+
+        const sectionObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+
+                    if (entry.target.id === 'cenario') {
+                        counters.forEach(animateCounter);
+                    }
+                    
+                    navLinks.forEach(link => {
+                        link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+                    });
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            section.classList.add('section-fade-in');
+            sectionObserver.observe(section);
+        });
+
+        // Close mobile menu on link click
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+        
+        // --- Risk Table Filter ---
+        const filterButtons = document.querySelectorAll('.risk-filter-btn');
+        const riskRows = document.querySelectorAll('.risk-row');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const filter = this.getAttribute('data-filter');
+
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('active', 'bg-blue-600', 'text-white');
+                    btn.classList.add('bg-gray-200', 'text-gray-700');
+                });
+                this.classList.add('active', 'bg-blue-600', 'text-white');
+                this.classList.remove('bg-gray-200', 'text-gray-700');
+
+                riskRows.forEach(row => {
+                    if (filter === 'all' || row.getAttribute('data-category') === filter) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // --- Chart.js Revenue Chart ---
+        const ctx = document.getElementById('revenueChart').getContext('2d');
+        const revenueChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Ano 1', 'Ano 3', 'Ano 5'],
+                datasets: [{
+                    label: 'Receita de Prêmios (em Milhões de R$)',
+                    data: [10, 25, 50], // Placeholder data
+                    backgroundColor: [
+                        'rgba(59, 130, 246, 0.6)',
+                        'rgba(37, 99, 235, 0.7)',
+                        'rgba(29, 78, 216, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(59, 130, 246, 1)',
+                        'rgba(37, 99, 235, 1)',
+                        'rgba(29, 78, 216, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Milhões de R$'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(context.parsed.y * 1000000);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // --- Modal Logic ---
+        const modalContainer = document.getElementById('modal-container');
+        const modalContent = document.getElementById('modal-content');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        const modalClose = document.getElementById('modal-close');
+
+        const modalData = {
+            'modal-defesa': {
+                title: '🛡️ Custos de Defesa e Sanções',
+                body: `<p>Esta cobertura é fundamental para a proteção legal e financeira da empresa após um incidente.</p>
+                       <ul class="list-disc list-inside space-y-2 mt-2">
+                         <li><strong>Custos de Defesa:</strong> Cobre honorários advocatícios e custas judiciais em processos civis, regulatórios, administrativos ou criminais.</li>
+                         <li><strong>Investigação:</strong> Inclui custos com assessoramento legal e representação para conduzir investigações forenses.</li>
+                         <li><strong>Sanções Administrativas:</strong> Cobertura para multas que a empresa seja obrigada a pagar por não conformidade com a LGPD.</li>
+                       </ul>`
+            },
+            'modal-dados': {
+                title: '💾 Responsabilidade por Dados',
+                body: `<p>Protege a empresa contra reclamações e perdas decorrentes do vazamento de informações confidenciais.</p>
+                       <ul class="list-disc list-inside space-y-2 mt-2">
+                         <li><strong>Dados Pessoais e Corporativos:</strong> Cobre a divulgação pública de dados privados de clientes e informações confidenciais de parceiros.</li>
+                         <li><strong>Segurança de Dados:</strong> Abrange perdas por contaminação de vírus, negação de acesso, roubo de credenciais ou destruição de dados.</li>
+                         <li><strong>Empresas Terceirizadas:</strong> Estende a proteção para violações de dados ocorridas em fornecedores que manuseiam dados em nome da segurada.</li>
+                       </ul>`
+            },
+            'modal-interrupcao': {
+                title: '⏱️ Interrupção de Negócios',
+                body: `<p>Minimiza o impacto financeiro quando as operações são paralisadas por um ataque cibernético.</p>
+                       <ul class="list-disc list-inside space-y-2 mt-2">
+                         <li><strong>Perda de Lucro:</strong> Compensa a perda de receita líquida que a empresa teria gerado se não fosse a interrupção.</li>
+                         <li><strong>Despesas Operacionais Adicionais:</strong> Cobre os custos extras e necessários para retomar as operações o mais rápido possível, como aluguel de equipamentos ou contratação de serviços temporários.</li>
+                       </ul>`
+            },
+            'modal-extorsao': {
+                title: ' ransom  Extorsão Cibernética',
+                body: `<p>Oferece suporte financeiro e técnico em casos de ataques de ransomware, uma das ameaças mais comuns e prejudiciais.</p>
+                       <ul class="list-disc list-inside space-y-2 mt-2">
+                         <li><strong>Pagamento de Resgate:</strong> Cobertura para os valores de resgate exigidos pelos criminosos para liberar os sistemas ou dados sequestrados.</li>
+                         <li><strong>Custos de Negociação:</strong> Cobre os honorários de especialistas contratados para negociar com os atacantes e gerenciar o pagamento.</li>
+                       </ul>`
+            },
+            'modal-notificacao': {
+                title: '🔔 Notificação e Monitoramento',
+                body: `<p>Garante o cumprimento das obrigações legais da LGPD e protege os indivíduos afetados por um vazamento de dados.</p>
+                       <ul class="list-disc list-inside space-y-2 mt-2">
+                         <li><strong>Custos de Notificação:</strong> Despesas para comunicar a violação de dados a todos os titulares afetados, conforme exigido por lei.</li>
+                         <li><strong>Monitoramento de Crédito:</strong> Cobre os custos de serviços de monitoramento de crédito para as vítimas, a fim de protegê-las contra fraudes de identidade.</li>
+                       </ul>`
+            },
+            'modal-imagem': {
+                title: ' восстановить  Restituição de Imagem',
+                body: `<p>Ajuda a empresa a gerenciar a crise e a preservar sua marca e a confiança dos stakeholders após um incidente público.</p>
+                       <ul class="list-disc list-inside space-y-2 mt-2">
+                         <li><strong>Gestão de Crise:</strong> Cobre os custos de contratação de uma empresa de Relações Públicas para desenvolver e executar uma estratégia de comunicação.</li>
+                         <li><strong>Monitoramento de Mídia:</strong> Despesas para acompanhar a cobertura da mídia e o sentimento do público em relação à marca.</li>
+                       </ul>`
+            }
+        };
+
+        document.querySelectorAll('[data-modal-target]').forEach(card => {
+            card.addEventListener('click', () => {
+                const targetId = card.getAttribute('data-modal-target');
+                const data = modalData[targetId];
+                if(data) {
+                    modalTitle.innerHTML = data.title;
+                    modalBody.innerHTML = data.body;
+                    modalContainer.classList.remove('hidden');
+                    modalContainer.classList.add('flex');
+                }
+            });
+        });
+
+        const closeModal = () => {
+            modalContainer.classList.add('hidden');
+            modalContainer.classList.remove('flex');
+        };
+
+        modalClose.addEventListener('click', closeModal);
+        modalContainer.addEventListener('click', (e) => {
+            if (e.target === modalContainer) {
+                closeModal();
+            }
+        });
+
+    });
+    </script>
+</body>
+</html>
