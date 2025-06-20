@@ -10,9 +10,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Corporate Trust -->
-    <!-- Application Structure Plan: A single-page, thematic dashboard structure was chosen over a linear report format for better usability. The flow guides the user from the problem (market context) to the solution (company proposal), products, strategy, risks, and execution plan. This non-linear, scannable layout with a sticky navigation allows stakeholders (investors, partners) to quickly access sections of interest, making the dense business plan digestible and engaging. Key interactions include animated counters for impact, toggles for comparisons, interactive cards for product exploration, and filters for risk analysis, all designed to facilitate understanding and exploration. -->
-    <!-- Visualization & Content Choices: 
+    <!-- Application Structure Plan: A single-page, thematic dashboard structure was chosen over a linear report format for better usability. The flow guides the user from the problem (market context) to the solution (company proposal), its core identity (Mission, Vision, Values), products, strategy, risks, and execution plan. This non-linear, scannable layout with a sticky navigation allows stakeholders (investors, partners) to quickly access sections of interest, making the dense business plan digestible and engaging. Key interactions include animated counters for impact, toggles for comparisons, interactive cards for product exploration, and filters for risk analysis, all designed to facilitate understanding and exploration. -->
+    <!-- Visualization & Content Choices:
     - Market Context -> Goal: Impact -> Viz: Animated Counters -> Interaction: On-scroll animation -> Justification: Immediately conveys the scale of the cyber threat. (Vanilla JS)
+    - Mission, Vision, Values -> Goal: Inform -> Viz: Structured text blocks -> Interaction: None (foundational info) -> Justification: Clearly defines company identity. (HTML/Tailwind)
     - SWOT -> Goal: Organize/Analyze -> Viz: Interactive 2x2 Grid -> Interaction: Hover to reveal details -> Justification: More engaging than a static table. (CSS/JS)
     - Products/Services -> Goal: Organize/Inform -> Viz: Card-based layout with icons -> Interaction: Click to expand/reveal details in a modal -> Justification: Avoids a long text block, allows user-driven exploration. (JS)
     - Risks -> Goal: Filter/Organize -> Viz: HTML Table with filter buttons -> Interaction: Click to filter table rows by category -> Justification: Makes the dense risk matrix manageable. (JS)
@@ -67,12 +68,14 @@
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
+                    <!-- Removed Logo Section -->
                     <span class="font-extrabold text-xl text-blue-600">Cyber Insurance Brasil</span>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
                         <a href="#cenario" class="nav-link px-3 py-2 rounded-md text-sm font-medium">O Cenário</a>
                         <a href="#solucao" class="nav-link px-3 py-2 rounded-md text-sm font-medium">A Solução</a>
+                        <a href="#missao-visao-valores" class="nav-link px-3 py-2 rounded-md text-sm font-medium">MVV</a>
                         <a href="#produtos" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Produtos</a>
                         <a href="#estrategia" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Estratégia</a>
                         <a href="#riscos" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Riscos</a>
@@ -93,6 +96,7 @@
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <a href="#cenario" class="nav-link block px-3 py-2 rounded-md text-base font-medium">O Cenário</a>
                 <a href="#solucao" class="nav-link block px-3 py-2 rounded-md text-base font-medium">A Solução</a>
+                <a href="#missao-visao-valores" class="nav-link block px-3 py-2 rounded-md text-base font-medium">MVV</a>
                 <a href="#produtos" class="nav-link block px-3 py-2 rounded-md text-base font-medium">Produtos</a>
                 <a href="#estrategia" class="nav-link block px-3 py-2 rounded-md text-base font-medium">Estratégia</a>
                 <a href="#riscos" class="nav-link block px-3 py-2 rounded-md text-base font-medium">Riscos</a>
@@ -136,8 +140,40 @@
                 </div>
             </div>
         </section>
-        
-        <section id="produtos" class="py-20 bg-white section-fade-in">
+
+        <section id="missao-visao-valores" class="py-20 bg-white section-fade-in">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-base font-semibold text-blue-600 tracking-wide uppercase">PILARES DA NOSSA EMPRESA</h2>
+                    <p class="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">Missão, Visão e Valores da Cyber Insurance Brasil</p>
+                    <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">Nossa identidade define quem somos, o que almejamos e os princípios que guiam cada ação da Cyber Insurance Brasil.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="p-6 bg-blue-50 rounded-lg shadow-md border-l-4 border-blue-600">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Missão</h3>
+                        <p class="text-gray-700">Proteger e capacitar empresas brasileiras contra as crescentes ameaças cibernéticas, oferecendo soluções de seguro inovadoras e serviços de prevenção e resposta que garantam a continuidade dos negócios, a conformidade regulatória e a tranquilidade no ambiente digital.</p>
+                    </div>
+                    <div class="p-6 bg-emerald-50 rounded-lg shadow-md border-l-4 border-emerald-600">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Visão</h3>
+                        <p class="text-gray-700">Ser a seguradora líder e mais confiável em cibersegurança no Brasil, reconhecida pela excelência em gestão de riscos, inovação tecnológica (especialmente no uso de IA) e pelo compromisso inabalável com a resiliência digital de nossos clientes.</p>
+                    </div>
+                    <div class="p-6 bg-amber-50 rounded-lg shadow-md border-l-4 border-amber-600">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Valores</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>** Confiança:** Construímos relações baseadas na transparência, ética e no compromisso de proteger o que é mais valioso para nossos clientes.</li>
+                            <li>** Inovação:** Buscamos constantemente as melhores e mais avançadas soluções tecnológicas e estratégias para antecipar e combater as ameaças cibernéticas.</li>
+                            <li>** Excelência:** Nossas operações, produtos e serviços são guiados pelos mais altos padrões de qualidade e eficácia.</li>
+                            <li>** Agilidade:** Reagimos rapidamente às novas ameaças e às necessidades dos clientes, oferecendo respostas eficazes e adaptáveis.</li>
+                            <li>** Parceria:** Atuamos como um verdadeiro parceiro estratégico, apoiando nossos clientes na prevenção, na conformidade e na recuperação pós-incidente.</li>
+                            <li>** Responsabilidade Social:** Contribuímos para um ambiente digital mais seguro para toda a sociedade, promovendo a conscientização e a educação em cibersegurança.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="produtos" class="py-20 section-fade-in">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
                     <h2 class="text-base font-semibold text-blue-600 tracking-wide uppercase">Nossos Produtos e Serviços</h2>
@@ -150,7 +186,7 @@
                     <!-- Coberturas Cards -->
                     <div class="card bg-gray-50 p-6 rounded-lg cursor-pointer" data-modal-target="modal-defesa">
                         <div class="flex items-center"><span class="text-2xl mr-3">🛡️</span><h4 class="font-bold text-lg">Custos de Defesa e Sanções</h4></div>
-                        <p class="text-sm text-gray-600 mt-2">Cobertura para honorários advocatícios e multas administrativas (LGPD).</p>
+                        <p class="text-sm text-gray-600 mt-2">Cobertura para honorários advocativos e multas administrativas (LGPD).</p>
                     </div>
                     <div class="card bg-gray-50 p-6 rounded-lg cursor-pointer" data-modal-target="modal-dados">
                         <div class="flex items-center"><span class="text-2xl mr-3">💾</span><h4 class="font-bold text-lg">Responsabilidade por Dados</h4></div>
@@ -161,7 +197,7 @@
                         <p class="text-sm text-gray-600 mt-2">Cobre perdas de lucro e despesas operacionais durante a paralisação.</p>
                     </div>
                     <div class="card bg-gray-50 p-6 rounded-lg cursor-pointer" data-modal-target="modal-extorsao">
-                        <div class="flex items-center"><span class="text-2xl mr-3"> ransom </span><h4 class="font-bold text-lg">Extorsão Cibernética</h4></div>
+                        <div class="flex items-center"><span class="text-2xl mr-3">💰</span><h4 class="font-bold text-lg">Extorsão Cibernética</h4></div>
                         <p class="text-sm text-gray-600 mt-2">Cobre pagamentos de resgate e custos associados a ataques de ransomware.</p>
                     </div>
                     <div class="card bg-gray-50 p-6 rounded-lg cursor-pointer" data-modal-target="modal-notificacao">
@@ -169,7 +205,7 @@
                         <p class="text-sm text-gray-600 mt-2">Custos para notificar usuários afetados e monitorar seus dados contra fraudes.</p>
                     </div>
                     <div class="card bg-gray-50 p-6 rounded-lg cursor-pointer" data-modal-target="modal-imagem">
-                        <div class="flex items-center"><span class="text-2xl mr-3"> восстановить </span><h4 class="font-bold text-lg">Restituição de Imagem</h4></div>
+                        <div class="flex items-center"><span class="text-2xl mr-3">🌟</span><h4 class="font-bold text-lg">Restituição de Imagem</h4></div>
                         <p class="text-sm text-gray-600 mt-2">Despesas com consultoria de Relações Públicas para gerenciar crises de reputação.</p>
                     </div>
                 </div>
@@ -192,7 +228,7 @@
                 </div>
             </div>
         </section>
-        
+
         <section id="estrategia" class="py-20 section-fade-in">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
@@ -570,7 +606,7 @@
                        </ul>`
             },
             'modal-extorsao': {
-                title: ' ransom  Extorsão Cibernética',
+                title: '💰 Extorsão Cibernética',
                 body: `<p>Oferece suporte financeiro e técnico em casos de ataques de ransomware, uma das ameaças mais comuns e prejudiciais.</p>
                        <ul class="list-disc list-inside space-y-2 mt-2">
                          <li><strong>Pagamento de Resgate:</strong> Cobertura para os valores de resgate exigidos pelos criminosos para liberar os sistemas ou dados sequestrados.</li>
@@ -586,7 +622,7 @@
                        </ul>`
             },
             'modal-imagem': {
-                title: ' восстановить  Restituição de Imagem',
+                title: '🌟 Restituição de Imagem',
                 body: `<p>Ajuda a empresa a gerenciar a crise e a preservar sua marca e a confiança dos stakeholders após um incidente público.</p>
                        <ul class="list-disc list-inside space-y-2 mt-2">
                          <li><strong>Gestão de Crise:</strong> Cobre os custos de contratação de uma empresa de Relações Públicas para desenvolver e executar uma estratégia de comunicação.</li>
